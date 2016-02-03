@@ -1,0 +1,248 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Biological Alerts (BioAlerts) &mdash; bioalerts 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="bioalerts 1.0 documentation" href="index.html" />
+    <link rel="next" title="Fingerprint Calculator (FPCalculator)" href="FPCalculator.html" />
+    <link rel="prev" title="Load Molecules (LoadMolecules)" href="LoadMolecules.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="FPCalculator.html" title="Fingerprint Calculator (FPCalculator)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="LoadMolecules.html" title="Load Molecules (LoadMolecules)"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">bioalerts 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="biological-alerts-bioalerts">
+<h1>Biological Alerts (BioAlerts)<a class="headerlink" href="#biological-alerts-bioalerts" title="Permalink to this headline">¶</a></h1>
+<p>This module can be used to</p>
+<p>The module is composed of the following three classes:</p>
+<ul class="simple">
+<li>GetSubstructuresFromReferenceDataset</li>
+<li>CalculatePvaluesCategorical</li>
+<li>CalculatePvaluesContinuous</li>
+</ul>
+<div class="section" id="getsubstructuresfromreferencedataset">
+<h2>GetSubstructuresFromReferenceDataset<a class="headerlink" href="#getsubstructuresfromreferencedataset" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="GetSubstructuresFromReferenceDataset">
+<em class="property">class </em><tt class="descname">GetSubstructuresFromReferenceDataset</tt><big>(</big><em>name_field=None</em><big>)</big><a class="headerlink" href="#GetSubstructuresFromReferenceDataset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Similar to GetDataSetInfo from FPcalculator XX</p>
+<p>This class can be used to load molecules in smiles sdf and mol2 format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><strong>name_field</strong> &#8211; <p>name of the data field containing the name of the molecules. Although the default value is None (<em>bool</em>), the name of the field if set when instantiating the class would be a string (<em>str</em>).
+:vartype name_field: str
+:var nb_substructures: total number of substructures, with a radius comprised in the argument <em>radii</em> of <em>GetDataSetInfo.extract_substructure_information()</em>, from the molecules specified in the argument <em>mols</em> of the method <em>GetDataSetInfo.extract_substructure_information()</em> (see below).
+:vartype nb_substructures: int
+:var max_radius: maximum substructure radius considered. This corresponds to the maximum value of the argument <em>radii</em> of <em>GetDataSetInfo.extract_substructure_information()</em>.
+:vartype max_radius: int
+:var substructure_dictionary: dictionary containing the substructures, with a radius comprised in the argument <em>radii</em> of <em>GetDataSetInfo.extract_substructure_information()</em>, and the molecules where they appear. Keys correspond to molecules names, whereas values correspond to
+:vartype substructure_dictionary: dict</p>
+<p><em>GetDataSetInfo</em> contains the following methods:</p>
+<dl class="method">
+<dt id="GetSubstructuresFromReferenceDataset.extract_substructure_information">
+<tt class="descname">extract_substructure_information</tt><big>(</big><em>radii</em>, <em>mols</em><big>)</big><a class="headerlink" href="#GetSubstructuresFromReferenceDataset.extract_substructure_information" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method extracts the substructures from the molecules (argument <em>mols</em>)
+whose radius is comprised in the argument <em>radii</em>.
+Each substructure in the molecule set (<em>mols</em>) is assigned an unambiguous integer identifier,
+which are kept in <em>GetDataSetInfo.substructure_dictionary</em>.
+The information about the substructures is kept in the fields indicated above.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>radii</strong> (<em>list</em>) &#8211; substructure radii to be considered</li>
+<li><strong>mols</strong> (<em>list</em>) &#8211; molecules from which the substructures are to be extracted.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="calculatepvaluescategorical">
+<h2>CalculatePvaluesCategorical<a class="headerlink" href="#calculatepvaluescategorical" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="CalculatePvaluesCategorical">
+<em class="property">class </em><tt class="descname">CalculatePvaluesCategorical</tt><big>(</big><em>max_radius</em><big>)</big><a class="headerlink" href="#CalculatePvaluesCategorical" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>max_radius</strong> (<em>int</em>) &#8211; maximum substructure radius considered.</li>
+<li><strong>output</strong> &#8211; pandas dataframe containing the following columns: (i) &#8216;Compound ID&#8217;, (ii) &#8216;p_value&#8217;, (iii) &#8216;Compounds with substr.&#8217;, (iv) &#8216;activity label&#8217;, (v) &#8216;Substructure&#8217;, (vi) &#8216;Substructure in Molecule&#8217;, (vii) &#8216;Comp. with substr. active&#8217;, and (viii) &#8216;Comp. with substr. inactive&#8217;.
+:vartype output: pandas.core.frame.DataFrame</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="CalculatePvaluesCategorical.calculate_p_values">
+<tt class="descname">calculate_p_values</tt><big>(</big><em>mols</em>, <em>substructure_dictionary</em>, <em>bioactivities</em>, <em>mols_ids</em>, <em>threshold_nb_substructures</em>, <em>threshold_pvalue</em>, <em>threshold_frequency</em>, <em>active_label=1</em>, <em>inactive_label=0</em><big>)</big><a class="headerlink" href="#CalculatePvaluesCategorical.calculate_p_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="CalculatePvaluesCategorical.HTMLOutputWriter">
+<tt class="descname">HTMLOutputWriter</tt><big>(</big><em>self</em>, <em>output_filename</em><big>)</big><a class="headerlink" href="#CalculatePvaluesCategorical.HTMLOutputWriter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="CalculatePvaluesCategorical.XlSXOutputWriter">
+<tt class="descname">XlSXOutputWriter</tt><big>(</big><em>self,frame, output_filename, molCol=['Substructure',&quot;Substructure in Molecule&quot;], size=(300,300)</em><big>)</big><a class="headerlink" href="#CalculatePvaluesCategorical.XlSXOutputWriter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="calculatepvaluescontinuous">
+<h2>CalculatePvaluesContinuous<a class="headerlink" href="#calculatepvaluescontinuous" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="CalculatePvaluesContinuous">
+<em class="property">class </em><tt class="descname">CalculatePvaluesContinuous</tt><big>(</big><em>radii_ext</em><big>)</big><a class="headerlink" href="#CalculatePvaluesContinuous" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>radii_ext</strong> (<em>list</em>) &#8211; substructure radii to be considered</li>
+<li><strong>output</strong> (<em>pandas.core.frame.DataFrame</em>) &#8211; pandas dataframe containing the following columns: (i) &#8216;Compound ID&#8217;, (ii) &#8216;Number compounds&#8217;, (iii) &#8216;statistic&#8217;, (iv) &#8216;p_value&#8217;, (v) &#8216;Diff. distribution means (w - wo)&#8217;, (vi) &#8216;Compounds with substr.&#8217;, (vii) &#8216;Substructure&#8217;, and (viii) &#8216;Substructure in Molecule&#8217;.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="CalculatePvaluesContinuous.calculate_p_values">
+<tt class="descname">calculate_p_values</tt><big>(</big><em>mols</em>, <em>substructure_dictionary</em>, <em>bioactivities</em>, <em>mols_ids</em>, <em>threshold_nb_substructures</em>, <em>threshold_pvalue</em>, <em>threshold_ratio_w_wo</em>, <em>Bonferroni=True</em><big>)</big><a class="headerlink" href="#CalculatePvaluesContinuous.calculate_p_values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="CalculatePvaluesContinuous.HTMLOutputWriter">
+<tt class="descname">HTMLOutputWriter</tt><big>(</big><em>self</em>, <em>output_filename</em><big>)</big><a class="headerlink" href="#CalculatePvaluesContinuous.HTMLOutputWriter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="CalculatePvaluesContinuous.XlSXOutputWriter">
+<tt class="descname">XlSXOutputWriter</tt><big>(</big><em>self,frame, output_filename, molCol=['Substructure',&quot;Substructure in Molecule&quot;], size=(300,300)</em><big>)</big><a class="headerlink" href="#CalculatePvaluesContinuous.XlSXOutputWriter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Biological Alerts (BioAlerts)</a><ul>
+<li><a class="reference internal" href="#getsubstructuresfromreferencedataset">GetSubstructuresFromReferenceDataset</a></li>
+<li><a class="reference internal" href="#calculatepvaluescategorical">CalculatePvaluesCategorical</a></li>
+<li><a class="reference internal" href="#calculatepvaluescontinuous">CalculatePvaluesContinuous</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="LoadMolecules.html"
+                        title="previous chapter">Load Molecules (LoadMolecules)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="FPCalculator.html"
+                        title="next chapter">Fingerprint Calculator (FPCalculator)</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/BioAlerts.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="FPCalculator.html" title="Fingerprint Calculator (FPCalculator)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="LoadMolecules.html" title="Load Molecules (LoadMolecules)"
+             >previous</a> |</li>
+        <li><a href="index.html">bioalerts 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Isidro Cortes Ciriano.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

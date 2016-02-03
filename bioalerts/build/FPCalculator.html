@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FPCalculator: Fingerprint Calculator &mdash; bioalerts 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="top" title="bioalerts 1.0 documentation" href="index.html" />
+    <link rel="prev" title="Alerts: Derivation of structural alerts" href="Alerts.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Alerts.html" title="Alerts: Derivation of structural alerts"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">bioalerts 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="fpcalculator-fingerprint-calculator">
+<h1>FPCalculator: Fingerprint Calculator<a class="headerlink" href="#fpcalculator-fingerprint-calculator" title="Permalink to this headline">¶</a></h1>
+<p>This module can be used to extract the substructures, of a user-defined radius,
+from a list of molecules in rdkit Mol class format.</p>
+<p>The module is composed of the following class:</p>
+<ul class="simple">
+<li>CalculateFPs</li>
+</ul>
+<div class="section" id="calculatefps">
+<h2>CalculateFPs<a class="headerlink" href="#calculatefps" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="CalculateFPs">
+<em class="property">class </em><tt class="descname">CalculateFPs</tt><big>(</big><em>radii</em>, <em>mols</em>, <em>reference_substructure_keys={}</em><big>)</big><a class="headerlink" href="#CalculateFPs" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>CalculateFPs</em> serve to calculate the following types of Morgan fingerpints:</p>
+<ol class="arabic simple">
+<li>Hashed fingerprints in binary format</li>
+<li>Hashed fingerprints in count format</li>
+<li>Unhashed fingerprints in binary format</li>
+<li>Unhashed fingerprints in count format</li>
+</ol>
+<p>Morgan fingerprints encode chemical structures by considering atom neighbourhoods.
+Each substructure in the molecule set, with a maximal user-defined bond radius, is assigned an unambiguous integer identifier.
+These identifiers are mapped either into an unhashed or hashed array.
+For the hashed array, the position in the array where the substructures will be mapped is given by the modulo of the division
+of the substructure identifier by the fingerprint size.
+In the case of unhashed (keyed) fingerprints, each bit in the fingerprint is associated to only one substructure,
+producing a length of the unhashed fingerprints equal to the number of distinct substructures present in the dataset.
+Both hashed and unhashed fingerprints can be stored in binary and count format.
+In count format, each bit in the fingerprint accounts for the number of times each substructure is present in a given compound,
+whereas in binary format each bit encodes whether a substructure is present in a compound (1), irrespective of the number of occurrences, or not (0).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>radii</strong> &#8211; radii of the substructures that will be used to generate the fingerprints for the molecules specified in the argument <em>mols</em>.</li>
+<li><strong>max_radius</strong> &#8211; maximum substructure radius considered.</li>
+<li><strong>mols</strong> &#8211; input molecules for which fingerprints will be calculated.</li>
+<li><strong>reference_substructure_keys</strong> &#8211; dictionary of substructure identifiers that will be used to calculate the unhashed version of the Morgan fingerprints. This dictionary is calculated with the method <em>LoadMolecules.GetDataSetInfo.extract_substructure_information().</em></li>
+<li><strong>substructure_dictionary</strong> &#8211; dictionary containing substructure for the molecules specified in the argument <em>mols</em>, and for which fingerprints will be calculated.</li>
+<li><strong>mols_reference_for_unhashed</strong> &#8211; reference set of molecules whose substructures are to be considered when computing unhashed fingerprints. This molecule set can be the same set of molecules for which the user wants to compute the fingerprints, <em>i.e.</em> <em>mols</em>, or a different molecule set. For instance, if a bioactivity model trained on a given data set using unhashed fingerprints is to be applied on an external data set, the fingerprints for the new molecules should be the same as those used to train the model. Thus, the refernce set of molecules (<em>mols_reference_for_unhashed</em>) would correspond in this case to the molecules used to train the aforesaid model.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The value for the following attributes is set when running the fingerprint calculation methods explained below.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Variables:</th><td class="field-body"><ul class="first last simple">
+<li><strong>columns_unhashed</strong> (<em>numpy.ndarray</em>) &#8211; fingerprint identifiers corresponding to the columns in the unhashed fingerprints.</li>
+<li><strong>substructure_ids</strong> (<em>numpy.ndarray</em>) &#8211; identifiers for the substructures.</li>
+<li><strong>fps_hashed_binary_quick</strong> (<em>numpy.ndarray</em>) &#8211; hashed fingerprints in binary format</li>
+<li><strong>fps_hashed_binary</strong> (<em>numpy.ndarray</em>) &#8211; hashed fingerprints in binary format.</li>
+<li><strong>fps_hashed_counts</strong> (<em>numpy.ndarray</em>) &#8211; unhashed fingerprints in count format.</li>
+<li><strong>fps_unhashed_binary</strong> (<em>numpy.ndarray</em>) &#8211; unhashed fingerprints in binary format.</li>
+<li><strong>fps_unhashed_counts</strong> (<em>numpy.ndarray</em>) &#8211; unhashed fingerprints in count format.</li>
+<li><strong>substructures_smiles</strong> (<em>dict</em>) &#8211; dictionary containing the smiles for the substructures.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="CalculateFPs.calculate_hashed_fps_binary_quick">
+<tt class="descname">calculate_hashed_fps_binary_quick</tt><big>(</big><em>nBits</em><big>)</big><a class="headerlink" href="#CalculateFPs.calculate_hashed_fps_binary_quick" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fast class method to compute hashed fingerprints in binary format. The computed hashed fingerprints are stored in <em>CalculateFPs.fps_hashed_binary_quick</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nBits</strong> (<em>int</em>) &#8211; fingerprint size</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="CalculateFPs.calculate_hashed_fps_counts">
+<tt class="descname">calculate_hashed_fps_counts</tt><big>(</big><em>nBits</em><big>)</big><a class="headerlink" href="#CalculateFPs.calculate_hashed_fps_counts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class method to compute hashed fingerprints in binary and count format. The computed fingerprints are stored in <em>CalculateFPs.fps_hashed_binary</em> and <em>CalculateFPs.fps_hashed_counts</em>, respectively.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nBits</strong> (<em>int</em>) &#8211; fingerprint size</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="CalculateFPs.calculate_unhashed_fps">
+<tt class="descname">calculate_unhashed_fps</tt><big>(</big><em>draw_substructures=False</em>, <em>image_directory='./images_substructures'</em><big>)</big><a class="headerlink" href="#CalculateFPs.calculate_unhashed_fps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class method to compute unhashed fingerprints in binary and count format. If <em>draw_substructures</em> is set to True, depictions of each substructure in .pdf format, in the context of a molecules from <em>mols</em> where the substructure is present, will be saved to the directory specified in the argument <em>image_directory</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>draw_substructures</strong> (<em>bool</em>) &#8211; if set to True, depictions for all substructures (with a bond radius allowed by the user through the argument radii) present in the training set of molecules will be generated.</li>
+<li><strong>image_directory</strong> (<em>str</em>) &#8211; directory to save the substructure depictions</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">FPCalculator: Fingerprint Calculator</a><ul>
+<li><a class="reference internal" href="#calculatefps">CalculateFPs</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Alerts.html"
+                        title="previous chapter">Alerts: Derivation of structural alerts</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/FPCalculator.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Alerts.html" title="Alerts: Derivation of structural alerts"
+             >previous</a> |</li>
+        <li><a href="index.html">bioalerts 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Isidro Cortes Ciriano.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

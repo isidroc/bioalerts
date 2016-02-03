@@ -3,7 +3,7 @@
 <head>
 
 <meta charset="utf-8" />
-<title>BioAlerts_tutorial</title>
+<title>bioalerts_tutorial</title>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -648,7 +648,7 @@ By contrast, a low p value indicates that it is not likely to have obtained <str
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>To calculate the p values for the substructures in the training set with a bond radius -in this example- in the set {1,2,3,4}, we first load the bioactivities associated to the molecules from the training set, and which can be found in <strong>molecules.mols</strong></p>
+<p>To calculate the p values for the substructures in the training set with a bond radius -in this example- in the set {2,3,4}, we first load the bioactivities associated to the molecules from the training set, and which can be found in <strong>molecules.mols</strong></p>
 
 </div>
 </div>
@@ -767,16 +767,18 @@ of those provided to the method <strong>training_dataset_info.extract_substructu
 and the molecules ids for the training set (argument <strong>mols_ids=dataset_info.mols_ids[0:stride]</strong>).</p>
 <p>We must also provide the threshold for the number of substructures (argument <strong>threshold_nb_substructures = 5</strong>),
 the p value threshold (argument <strong>threshold_pvalue = 0.05</strong>), and the threshold for the
-substructure frequency (argument <strong>threshold_frequency = 0</strong>).</p>
+substructure frequency (argument <strong>threshold_frequency = 0.7</strong>).</p>
 <p>The explanation for these three arguments is as follows:</p>
 <ol>
 <li><p><strong>threshold_nb_substructures</strong>: the threshold for the number of substructures indicates the minimum number of compounds in the training set with a given substructure (<strong>n_s</strong>) required to proceed the calculation of the p value for that substructure. For instance, if the thresehold is set to 5, and only 4 compounds from the training set present a given substructure <em>S</em>, the algorithm will not calculate the p value for <em>S</em> when applied to the test set.</p>
 </li>
 <li><p><strong>thershold_pvalue</strong>: the p value threshold indicates the level of significance (alpha) to consider a given substructure as structual alert. As said before, the identified strucutural alerts can foster or decrease activity in the biological system under study.</p>
 </li>
-<li><p><strong>threshold_frequency</strong>: the threshold for the substructure frequency corresponds to the ratio <strong>m_S act / n_s</strong>. Therefore, if there are too few active molecules with a given substructure in the set of molecules (active and inactive) with that substructure, the p values will not be computed.</p>
+<li><p><strong>threshold_frequency</strong>: the threshold for the substructure frequency corresponds to the ratio <strong>m_S act / n_s</strong>. Therefore, if there are too few active molecules with a given substructure in the set of molecules (active and inactive) with that substructure, the p values will not be computed. It is important to set a threshold frequency as (quoted from Ahlberg et al.):</p>
 </li>
 </ol>
+<p>"For a substructure to make a statistically significant contribution to activity, it is required that the p-value is below this level. Furthermore, the p-value alone is not sufficient for a substructure to accurately describe an activity. Depending on the skew of the data, the accuracy and p-values required for a significant call will intersect differently. For example, in a 50/50 distribution of positives and negatives, the minimum occurrence for which a substructure can be significant depending on whether its p-value is 5, see Figure 1A. For the majority class of the 70/30 example, the accuracy and p-value are intersected at 50 compounds in the data, see Figure 1B, whereas the minority class is intersected already at three compounds, Figure 1C. This means that, in addition to the level of significance, a lowest level of substructure frequency needs to be imposed on the substructures.</p>
+<p>For data where one activity is overrepresented, unbalanced data, it is possible to obtain significant substructures with only two or three occurrences in the data. To avoid this, a lower bound on the number of compounds in which a substructure exists has to be used, denoted minimum occurrence. The minimum occurrence defaults to 5, which derives from the 50/ 50 distributed data and a p-value of 0.05, see Figure 1A."</p>
 
 </div>
 </div>
@@ -820,7 +822,7 @@ substructure frequency (argument <strong>threshold_frequency = 0</strong>).</p>
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Number of substructures processed:  4723
-P values were computed for:  355 substructures
+Significant substructures:  70 substructures
 </pre>
 </div>
 </div>
@@ -857,9 +859,38 @@ P values were computed for:  355 substructures
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>355
+<pre>70
 </pre>
 </div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="nb">float</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="mi">7</span><span class="p">)</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="mi">7</span><span class="p">))</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[18]:</div>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>1.0</pre>
+</div>
+
 </div>
 
 </div>
@@ -879,10 +910,10 @@ For instance:</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">Alerts_categorical</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="s">&#39;Substructure in Molecule&#39;</span><span class="p">][</span><span class="mi">260</span><span class="p">]</span>
+<div class=" highlight hl-ipython2"><pre><span class="n">Alerts_categorical</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="s">&#39;Substructure in Molecule&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 </pre></div>
 
 </div>
@@ -893,79 +924,99 @@ For instance:</p>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[18]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[19]:</div>
 
 
 <div class="output_png output_subarea output_execute_result">
-<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAcIAAACWCAYAAABNcIgQAAAO/UlEQVR4nO3de2zW1R3H8U/v3ISV
-i0ORjhFsgVK3AQ7xRkLBXQSH2cCR7OmcgzqFlZqFyyIKI4O0sg06VFK3SMrItpRkces2nYVtCrOA
-UAYF5bKB0g6sBaQVC23p890fR3wsWKi9PTw97xdpwu/wO7/f90kgH845v995oszMBACAp6LDXQAA
-AOFEEAIAvEYQAgC8RhACALxGEAIAvEYQAgC8RhACALxGEAIAvEYQAgC8RhACALxGEAIAvEYQAgC8
-RhACALxGEAIAvEYQAgC8RhACALxGEAIAvEYQAgC8RhACALxGEAIAvEYQAgC8RhACALxGEAIAvEYQ
-AgC8RhACALxGEAIAvEYQAgC8RhACALxGEAIAvEYQAgC8RhACALxGEAIAvEYQAgC8RhACALxGEAIA
-vEYQAgC8RhACALxGEAIAvEYQAgC8RhACALxGEAIAvEYQAgC8RhACALxGEAIAvEYQ4ppQUyNFRUnH
-jjVtf+456fbbQ8e7d0uBgDR5srRmjVRV5dqrqlz/Rx5p2n/DBmnixI6tvaurbqzWzKMz1W9PP41+
-c7S6lXbT1w5/TZUNlZKk0tpS3bzv5jBXCbQeQYiIUV3tAvCGG6SnnpLKyqRvf7vpORs3Srt2hae+
-ruqBIw8oSlGqSKtQ6YhSnf7iafWO6a3vvPWdcJcGtIvYcBcAtNS2bVJKigtBSVq2TLrxRunkydA5
-Tz4pzZkjlZS4ESLaprS2VK+cfUXlaeXqHt1dktQjuofyBuep4FSBggqGuUKg7QhCXFPWrpU+85nQ
-8fbtod+PHy/94Q+h4y1bpBEjpP79Q1Oks2dLBQXSunXSQw91Ssmtd+yYdOKEdPq0dOed0nXXhbui
-y+w7t0/DEoapf2z/Ju0D4wZq4cCFYaoKaF8EIa4pb7wh9egROq6okGI//Fvau7f7kaTf/laaO1d6
-5pmm/WNipKeflqZNk+6/v1NK/vTOnZN++Uvppz+VEhOld991Ibh4sftQMTHhrvAj1Y3V6hPTJ9xl
-AB2KNUJcU9askX73u9DPrFlN/7yuTvrmN6WlS6W//EWaOfPya4wfL331qy5XrjmFhdLw4dKiRdLZ
-s25EWF/v5nezs6Vx46StW8Nd5UeGJgxVaW2p6qyuSXuDNSi/Kl/ng+fDVBnQfghCRIwLF6QZM9xU
-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
-ateWmCgtXCg99pgUH9983wsXpOeflxYvlqqqXFvPntKPfiQlJbn2d95x7d27uxHi4sVSr15trxvo
-KgzAp1JbW2s5OTnWq1cvS09Pt7KystZfrLjYbMQIM7eaZxYdbRYImFVWXr3vpk1mo0Zd3vfEidA5
-Z8+aLVlilpAQOm/QILOCArNgsPV1A10IQQi0Unl5uQUCAYuLi7PMzEyrqqpqeeczZ8zS00PhJJlN
-nmy2b9/V+x46ZDZ9etO+48aZlZQ03+fw4U/us21by2sGuijWCIFWuummm7R+/XoVFxdr+/btSklJ
-UV5enhobG6/euU8fN60pScOGSYWF0ssvX3kd8MwZadEiKS3N7SzjipAKCty7hbfd1nzfi/fYtMmt
-I0rS9u3S7bdLGRlSZWWLPjPQFbFGCLSDYDCoDRs2aP78+Ro0aJDy8vJ01113XbnT7t3uwZasrCuv
-AwaD0oYN7sX5d991bT16uOOFC93a36dxcV3x8celkyddW69ebl3xxz92T5wCHiEIgXb03nvvKTc3
-V6tWrdI999yjNWvWaMiQIa2/4D/+4R6Y2bPHHUdFSd/6lvSzn7mHYdri9GnpJz+RnnlGujiKvflm
-6Re/kKZMadu1gQjC1CjQjhITE5WTk6O9e/eqsbFRqampWrp0qc6dO/fpLlRe7qYsJ04MheCtt0pb
-t7opzraGoOR2qMnLk8rKpK98xbUdPixNnSpNnizt39/2ewARgBEh0IGKioqUnZ2t+vp6LV++XIFA
-QFFRUc13+OADaeVKKTdXOn/etd14o3u1YtYsKboD/+9aVCRlZ0tHjrjjuDjpkUekZcvcmibQRRGE
-QAerr6/X2rVr9cQTT2jMmDHKy8vTLbfc0vQkM+k3v3Frfpe+9/f441JH7GP6ycW6vU2feEJ6/33X
-1q+fO547V4qJ6Zw6gE7E1CjQweLj4zVv3jwdOHBAgwcP1ujRo5WRkaGqiy/A79jhnt787ndDIThl
-ivTGG1JOTueFoCvW7W5z4ICUmelGoKdOuZHix3e8AboQRoRAJ3v99dc/CsYXJkzQ3X/8Y2hz7DFj
-pNWrpTvvDGuNH3ntNReMO3e646goacUK9xoH0EUQhEAYBINBrVu3Ti89+6w27t/vRn2LF1+b048f
-n7atqnKvfaSlhbsqoN0QhEC4vfiiGwF25hRoa9TUuNc5vvGNcFcCtCuCEADgNR6WAQB4jSAEAHiN
-IAQAeI0gBAB4jSAEAHiNIAQAeI0gBAB4jSAEAHiNIAQAeI0gBAB4jSAEAHiNIAQAeI0gBAB4jSAE
-AHiNIAQAeI0gBAB4jSAEAHiNIAQAeI0gBAB4jSAEAHiNIAQAeI0gBAB4jSAEAHiNIAQAeI0gBAB4
-jSAEAHiNIAQAeI0gBAB4jSAEAHiNIAQAeI0gBAB4jSAEAHiNIAQAeI0gBAB4jSAEAHiNIAQAeI0g
-BAB4jSAEAHiNIAQAeI0gBAB4jSAEAHiNIAQAeI0gBAB4jSAEAHiNIAQAeI0gBAB4jSAEAHjt/7DU
-H4KPPyJcAAAAAElFTkSuQmCC
+<img src="data:image/png;base64,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
+zc2VJkywbs+CAjvXvLn03HPSkCFSRERwvqeE9HTp4Yft6yrxa4DwEeomKVAlCgqcmzjRuXPO8Xcr
+nnuunSssPP37fvONdU1GRPjv26mTcx99dGb1+rpt4+NLd9s+9phzhw6d2b1PQn6+c88/b/9cV13l
+XG6unf/+eyvlnntKf37OHOd69HDuwAF7/6uvSr8/fbpziYn+4zVrnLv1Vud693Zu8mS7LxAqdI2i
+5ktPt+7Lhx6yvr+f1tdp2zbr0qyo9TZmjHVHfvNNxfdu3ty6JjMypG7d7NyaNVL37lL//tKOHade
+7+rV0hVXWLft7t12LinJtktLTZXq1j31e56imBhrOGdnSwMHSrGxpd9fsEDKzDy9ex84YBNzmza1
+BnVWlnTzzWdeM3DaQp3EQKXZssW5vn1LT27p1cu5DRtOfO2XXzoXE2PX1KlT8QSakoqKyrbiate2
+VtzBgyf+zp07K6d1GUS+FuGkSc5dfrk1XJ07tRbh++/bnCOfXbvsJ+/ZUzW/ATgeLULUPP/7nzVn
+Lr3UvxyidWub5LJ0abnr68qoV8+WSURH2zjdM8/YdQsXVnxNZKTt7/nFF9LTT1uzKj9fSkuzFuns
+2f5xyZJKfuanbdF07rnSxInWOgzDvUHvusuWVs6cWf7706bZT/K93n/f/15iYul/xhUr7Kc3bFi5
+NQMVCnUSA0Hja5E1buxvUflac0eOnN49s7NtiUTJVuU11zi3du2Jr9261dYjlLy2a1fnPv7Y/5lF
+i5xr2dL/fnS0rWXYv//06q1kvhZhQYFzq1bZP/UPP5RtESYnO3fzzf5X166lxwh93nzTufr1nZs3
+r+p/C+BDEKJmWL7cucsuK72+7vbbrd8tGJYsca5Dh9Nbv7dkSdm1f/37O9etW9k1iTk5wam3kpQM
+QuecGzrUufvuO/XJMkeOOPf73zt30UUWqEAo0TWK6q+42Lo816+34y5drL9t5kwpPj443+Hbu3P6
+dOvDKy62bszWrW3JhG9pQ0XXrl9vO9U0bmzXvvuufyuXNm1sPWJ6um2RVo2kpUnz59v8oJNVWGhz
+kBo2tIkyiYmVVx9wMghCVH9/+Ys0bpwtdps1yz/rMtiio23cMDvbZp1GRdmq82eesS3XFiyo+Frf
++OGWLTabtLjYzo8bZwvk+/ULfr1VID5eGjtWmjLl5K/54AMbRp0wwXaHy8uzFyuaESoEIWqOqCgL
+m8pe/e3biiUrS+rb185t3erf+eWnJzyUq359W3Dvc9ddFrDV2AMPWMP4ZIMsI8M28ImLk+rU8b94
+MhRChZ1lUP1NmWL/N46OtucIHm/yZGtyXH115fTD+bZi2bbNjqOipDvukMaPlxo1Kvv5d96Rrr/e
+/t69+4y2RwNw5mgRouZ79lnp8celZcsq5/79+9szASdOtGZOyadDpKWVH84AwgZBCARDdLTtUrNl
+i7UGIyP96xl9axkBhCWCEAim+Hjp9dft6Rbdu9ukneTkUFcFIICoUBcA1EidOkn/+Y+0fz+PbgDC
+HC1CoLJERNgsUQBhjSAEAHgaQQgA8DSCEADgaQQhAMDTCEIAgKcRhAAATyMIAQCeRhACADyNIAQA
+eBpBCADwNIIQAOBpBCFQWRYtkv7611BXAeAECEIg2LKzpX79pN/+Vho5Uvrqq1BXBCAAghAIln37
+pPvvly65RPrXv+xcs2bSd9+Fti4AAfE8QtR89etLxcVS7dqVc//CQumNN6SxY6U9e+xcnTrSqFH2
+hPqYmMr5XgBBQRCi5tu6tfLu/eGH0kMPSRs22HFkpHTLLdILL9jT6gGEPbpGUXMUF0v5+VXzXVu3
+SjfdJPXu7Q/Byy+XPv5Ymj07cAjSVQqEFYIQ1V9iojRsmAVhmzYWRJVl/37r7kxIkBYssHPNm0uz
+ZkkZGVK3bhVfm5srpaRIDz5o3bUpKVLdupVXK4CTQhCi+uvcWTrnHMk5aedO6bbbpF69pKys4H1H
+cbEF7MUXS2lpUkGBFBsrPf20lJMjDR0qRURUfO3MmdJFF0nPPGPXHjki9ehhY4kAQirCOedCXQQQ
+FEuX2njdxo127Buve+klqVGj07/vsmXSww9L69fbcUSEdOON0osvSuedF/ja1autpowM/7mkJGny
+ZKlly9OvCUDQ0CJEzdG7t7R2rTRxohQXZy2xOXOsFTdpks3uPBVff20tvZ49/SHYtau0cqX01luB
+Q/C//7Vru3Xzh2CnTtLy5VJ6OiEIhBFahKiZ9u2Tnn1WmjpVKiqyc23bSn/+s3TttSe+ft06C7GC
+Ajtu3lxKTZUGD664C1SS8vKkV16Rxo+XDh+2c+eeKz35pK0xrFXrjH4WgOAjCFGzrVkjjRhhrTif
+pCRrIbZqVfF1zkndu0uZmTa5ZcwYG4cM9Pm335YeecS/k0x0tHTvvRbIcXHB+T0Ago4gRM1XXkid
+dZZ0zz3Wcqso4DZvtsksJxoHzMy0ccDjw3biROnCC4PxCwBUIoIQ3pGXZwvd09Js1qYk/fzn0vPP
+S0OGBO7yLM+339os0BkzbDxSsu7Xl1+W+vYNbu0AKg1BCO/55hvr6pwzx3/ul7+07tJA6wB9jh6V
+pk2TnnpKOnjQzjVoYMfDh0tRbNgEVCcEIbxr2TIbP/StN/Qtt5gwQWrSpPxr0tPtmu3b7Tg6WvrD
+H6TnnpMaNqyaugEEFUEIb/NtmD1mjLR3r52rW1f605+kxx+Xzj7bzq1da+OAH33kv7Z3bxsH7NCh
+qqsGEEQEISBJP/xg430ll1u0aWPnMjLKnn/pJZsQA6DaIwiBktavt67P5cvtODLSPxHGtz/ovfda
+lyiAGoEgBMrjGwvs0UN680170sSLL0qNG4e6MgBBRhACFcnPt+7Q/Pwz26sUQFgjCAEAnsam2wAA
+TyMIAQCeRhACADyNIAQAeBpBCADwNIIQAOBpBCEAwNMIQgCApxGEAABPIwgBAJ5GEAIAPI0gBAB4
+GkEIAPA0ghAA4GkEIQDA0whCAICnEYQAAE8jCAEAnkYQAgA8jSAEAHgaQQgA8DSCEADgaQQhAMDT
+CEIAgKcRhAAAT/t/sxNCFd/C3JkAAAAASUVORK5CYII=
 "
 >
 </div>
@@ -989,7 +1040,7 @@ This data.frame has the following columns:</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">Alerts_categorical</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">columns</span>
@@ -1003,7 +1054,7 @@ This data.frame has the following columns:</p>
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[19]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[20]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -1028,7 +1079,7 @@ This data.frame has the following columns:</p>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">Alerts_categorical</span><span class="o">.</span><span class="n">XlSXOutputWriter</span><span class="p">(</span><span class="n">Alerts_categorical</span><span class="o">.</span><span class="n">output</span><span class="p">,</span> 
@@ -1062,7 +1113,7 @@ The data set comprises the pIC50 values for 2,311 compounds on cyclooxygenase 2 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">molecules</span> <span class="o">=</span> <span class="n">bioalerts</span><span class="o">.</span><span class="n">LoadMolecules</span><span class="o">.</span><span class="n">LoadMolecules</span><span class="p">(</span><span class="s">&quot;./datasets/COX2.smi&quot;</span><span class="p">,</span><span class="n">name_field</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
@@ -1091,7 +1142,7 @@ All molecules in the input file were processed correctly
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">cox_bio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="s">&#39;./datasets/COX2.bio&#39;</span><span class="p">,</span><span class="n">skiprows</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -1136,7 +1187,7 @@ All molecules in the input file were processed correctly
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">stride</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">molecules</span><span class="o">.</span><span class="n">mols</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.9</span><span class="p">)</span>
@@ -1166,7 +1217,7 @@ All molecules in the input file were processed correctly
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">bio_training</span> <span class="o">=</span> <span class="n">cox_bio</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">stride</span><span class="p">]</span>
@@ -1195,7 +1246,7 @@ All molecules in the input file were processed correctly
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[25]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">training_dataset_info</span> <span class="o">=</span> <span class="n">bioalerts</span><span class="o">.</span><span class="n">LoadMolecules</span><span class="o">.</span><span class="n">GetDataSetInfo</span><span class="p">(</span><span class="n">name_field</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
@@ -1209,7 +1260,7 @@ All molecules in the input file were processed correctly
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[26]:</div>
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">Alerts_continuous</span> <span class="o">=</span> <span class="n">bioalerts</span><span class="o">.</span><span class="n">Alerts</span><span class="o">.</span><span class="n">CalculatePvaluesContinuous</span><span class="p">(</span><span class="n">radii_ext</span><span class="o">=</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">])</span>
@@ -1222,7 +1273,7 @@ All molecules in the input file were processed correctly
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[27]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">Alerts_continuous</span><span class="o">.</span><span class="n">calculate_p_values</span><span class="p">(</span><span class="n">mols</span><span class="o">=</span><span class="n">test</span><span class="p">,</span>
@@ -1231,7 +1282,7 @@ All molecules in the input file were processed correctly
                                      <span class="n">mols_ids</span> <span class="o">=</span> <span class="n">molecules</span><span class="o">.</span><span class="n">mols_ids</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">stride</span><span class="p">],</span>
                                      <span class="n">threshold_nb_substructures</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
                                      <span class="n">threshold_pvalue</span> <span class="o">=</span> <span class="mf">0.05</span><span class="p">,</span>
-                                     <span class="n">threshold_ratio</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+                                     <span class="n">threshold_ratio</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -1296,7 +1347,7 @@ All molecules in the input file were processed correctly
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[28]:</div>
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="nb">len</span><span class="p">(</span><span class="n">Alerts_continuous</span><span class="o">.</span><span class="n">output</span><span class="p">)</span>
@@ -1310,11 +1361,11 @@ All molecules in the input file were processed correctly
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[28]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[29]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>2</pre>
+<pre>7</pre>
 </div>
 
 </div>
@@ -1335,7 +1386,7 @@ All molecules in the input file were processed correctly
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[29]:</div>
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">Alerts_continuous</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="s">&#39;Substructure in Molecule&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
@@ -1349,7 +1400,7 @@ All molecules in the input file were processed correctly
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[29]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[30]:</div>
 
 
 <div class="output_png output_subarea output_execute_result">
@@ -1505,7 +1556,7 @@ kIiIvBoLIRERebX/D99g2jRmsf83AAAAAElFTkSuQmCC
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[30]:</div>
+<div class="prompt input_prompt">In&nbsp;[31]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">Alerts_continuous</span><span class="o">.</span><span class="n">output</span><span class="o">.</span><span class="n">columns</span>
@@ -1519,7 +1570,7 @@ kIiIvBoLIRERebX/D99g2jRmsf83AAAAAElFTkSuQmCC
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[30]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[31]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -1565,7 +1616,7 @@ kIiIvBoLIRERebX/D99g2jRmsf83AAAAAElFTkSuQmCC
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[31]:</div>
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">Alerts_continuous</span><span class="o">.</span><span class="n">XlSXOutputWriter</span><span class="p">(</span><span class="n">Alerts_continuous</span><span class="o">.</span><span class="n">output</span><span class="p">,</span><span class="s">&#39;test_continuous_COX2.xlsx&#39;</span><span class="p">)</span>
@@ -1597,7 +1648,7 @@ kIiIvBoLIRERebX/D99g2jRmsf83AAAAAElFTkSuQmCC
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[32]:</div>
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">BBB_mols</span> <span class="o">=</span> <span class="n">bioalerts</span><span class="o">.</span><span class="n">LoadMolecules</span><span class="o">.</span><span class="n">LoadMolecules</span><span class="p">(</span><span class="s">&quot;./datasets/BBB.smi&quot;</span><span class="p">,</span><span class="n">name_field</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span>
@@ -1610,7 +1661,7 @@ kIiIvBoLIRERebX/D99g2jRmsf83AAAAAElFTkSuQmCC
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[33]:</div>
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">BBB_mols</span><span class="o">.</span><span class="n">ReadMolecules</span><span class="p">()</span>
@@ -1638,7 +1689,7 @@ All molecules in the input file were processed correctly
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[34]:</div>
+<div class="prompt input_prompt">In&nbsp;[35]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">BBB_bio</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">genfromtxt</span><span class="p">(</span><span class="s">&#39;./datasets/BBB.bio&#39;</span><span class="p">,</span><span class="n">skiprows</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
@@ -1668,7 +1719,7 @@ All molecules in the input file were processed correctly
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[35]:</div>
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">stride</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">BBB_mols</span><span class="o">.</span><span class="n">mols</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.9</span><span class="p">)</span>
@@ -1722,7 +1773,7 @@ All molecules in the input file were processed correctly
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[36]:</div>
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">fps_training</span> <span class="o">=</span> <span class="n">bioalerts</span><span class="o">.</span><span class="n">FPCalculator</span><span class="o">.</span><span class="n">CalculateFPs</span><span class="p">(</span><span class="n">radii</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">mols</span><span class="o">=</span><span class="n">training</span><span class="p">)</span>
@@ -1735,7 +1786,7 @@ All molecules in the input file were processed correctly
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[37]:</div>
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">fps_training</span><span class="o">.</span><span class="n">calculate_hashed_fps_binary_quick</span><span class="p">(</span><span class="n">nBits</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
@@ -1748,7 +1799,7 @@ All molecules in the input file were processed correctly
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[38]:</div>
+<div class="prompt input_prompt">In&nbsp;[39]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">print</span> <span class="n">fps_training</span><span class="o">.</span><span class="n">fps_hashed_binary_quick</span><span class="o">.</span><span class="n">shape</span>
@@ -1787,7 +1838,7 @@ Thus, in this case this method will consider all substructures with a bond radiu
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[39]:</div>
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">fps_training</span><span class="o">.</span><span class="n">calculate_hashed_fps</span><span class="p">(</span><span class="n">nBits</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
@@ -1800,7 +1851,7 @@ Thus, in this case this method will consider all substructures with a bond radiu
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[40]:</div>
+<div class="prompt input_prompt">In&nbsp;[41]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">print</span> <span class="n">fps_training</span><span class="o">.</span><span class="n">fps_hashed_binary</span><span class="o">.</span><span class="n">shape</span>
@@ -1845,7 +1896,7 @@ In this example, this would be correspond to setting the value of the argument r
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[41]:</div>
+<div class="prompt input_prompt">In&nbsp;[42]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">print</span> <span class="p">(</span><span class="n">fps_training</span><span class="o">.</span><span class="n">fps_hashed_binary_quick</span> <span class="o">==</span> <span class="n">fps_training</span><span class="o">.</span><span class="n">fps_hashed_binary</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
@@ -1872,7 +1923,7 @@ In this example, this would be correspond to setting the value of the argument r
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[42]:</div>
+<div class="prompt input_prompt">In&nbsp;[43]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">toto</span> <span class="o">=</span> <span class="n">fps_training</span><span class="o">.</span><span class="n">fps_hashed_counts</span>
@@ -1887,7 +1938,7 @@ In this example, this would be correspond to setting the value of the argument r
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[42]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[43]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -1910,47 +1961,10 @@ In this example, this would be correspond to setting the value of the argument r
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[43]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">fps_training</span><span class="o">.</span><span class="n">fps_hashed_binary</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">Out[43]:</div>
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>array([[0, 0, 1, 1, 0, 0, 0, 1, 0],
-       [0, 0, 1, 0, 0, 0, 0, 1, 0],
-       [0, 0, 0, 1, 0, 0, 0, 1, 0],
-       [0, 0, 0, 0, 0, 1, 0, 1, 0],
-       [0, 0, 0, 1, 0, 0, 0, 1, 1],
-       [1, 0, 0, 0, 1, 1, 0, 0, 0],
-       [0, 0, 1, 0, 0, 1, 0, 1, 0],
-       [0, 0, 0, 0, 0, 0, 0, 1, 1],
-       [0, 0, 0, 0, 1, 0, 0, 1, 0]])</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
 <div class="prompt input_prompt">In&nbsp;[44]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython2"><pre><span class="n">fps_training</span><span class="o">.</span><span class="n">fps_hashed_binary_quick</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+<div class=" highlight hl-ipython2"><pre><span class="n">fps_training</span><span class="o">.</span><span class="n">fps_hashed_binary</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
 </pre></div>
 
 </div>
@@ -1982,6 +1996,43 @@ In this example, this would be correspond to setting the value of the argument r
 </div>
 
 </div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[45]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="n">fps_training</span><span class="o">.</span><span class="n">fps_hashed_binary_quick</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span><span class="mi">1</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[45]:</div>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([[0, 0, 1, 1, 0, 0, 0, 1, 0],
+       [0, 0, 1, 0, 0, 0, 0, 1, 0],
+       [0, 0, 0, 1, 0, 0, 0, 1, 0],
+       [0, 0, 0, 0, 0, 1, 0, 1, 0],
+       [0, 0, 0, 1, 0, 0, 0, 1, 1],
+       [1, 0, 0, 0, 1, 1, 0, 0, 0],
+       [0, 0, 1, 0, 0, 1, 0, 1, 0],
+       [0, 0, 0, 0, 0, 0, 0, 1, 1],
+       [0, 0, 0, 0, 1, 0, 0, 1, 0]])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
@@ -1993,7 +2044,7 @@ In this example, this would be correspond to setting the value of the argument r
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[45]:</div>
+<div class="prompt input_prompt">In&nbsp;[46]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">fps_training</span><span class="o">.</span><span class="n">calculate_unhashed_fps</span><span class="p">(</span><span class="n">draw_substructures</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -2050,7 +2101,7 @@ Thus, the substructures present in the input molecules will be considered for th
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[46]:</div>
+<div class="prompt input_prompt">In&nbsp;[47]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="c">#  Reference molecules</span>
@@ -2064,7 +2115,37 @@ Thus, the substructures present in the input molecules will be considered for th
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[47]:</div>
+<div class="prompt input_prompt">In&nbsp;[48]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span class="n">fps_training</span><span class="o">.</span><span class="n">substructure_ids</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">Out[48]:</div>
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>array([4272690567, 3416859016, 3818546315, ..., 1182622762, 3218693969,
+       3777168895])</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[49]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">reference_molecules</span><span class="o">.</span><span class="n">extract_substructure_information</span><span class="p">(</span><span class="n">radii</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span><span class="n">mols</span><span class="o">=</span><span class="n">training</span><span class="p">)</span>
@@ -2077,7 +2158,7 @@ Thus, the substructures present in the input molecules will be considered for th
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[48]:</div>
+<div class="prompt input_prompt">In&nbsp;[50]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">reference_keys</span> <span class="o">=</span> <span class="n">reference_molecules</span><span class="o">.</span><span class="n">substructure_dictionary</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
@@ -2105,7 +2186,7 @@ Thus, the substructures present in the input molecules will be considered for th
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[49]:</div>
+<div class="prompt input_prompt">In&nbsp;[51]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">fps_test</span> <span class="o">=</span> <span class="n">bioalerts</span><span class="o">.</span><span class="n">FPCalculator</span><span class="o">.</span><span class="n">CalculateFPs</span><span class="p">(</span><span class="n">radii</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span>
@@ -2120,7 +2201,7 @@ Thus, the substructures present in the input molecules will be considered for th
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[50]:</div>
+<div class="prompt input_prompt">In&nbsp;[52]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">fps_test</span><span class="o">.</span><span class="n">calculate_unhashed_fps</span><span class="p">()</span>
@@ -2133,7 +2214,7 @@ Thus, the substructures present in the input molecules will be considered for th
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[51]:</div>
+<div class="prompt input_prompt">In&nbsp;[53]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">fps_test</span><span class="o">.</span><span class="n">fps_unhashed_counts</span><span class="o">.</span><span class="n">shape</span>
@@ -2147,7 +2228,7 @@ Thus, the substructures present in the input molecules will be considered for th
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[51]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[53]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -2162,7 +2243,7 @@ Thus, the substructures present in the input molecules will be considered for th
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[52]:</div>
+<div class="prompt input_prompt">In&nbsp;[54]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="nb">len</span><span class="p">(</span><span class="n">fps_training</span><span class="o">.</span><span class="n">columns_unhashed</span><span class="p">)</span>
@@ -2176,7 +2257,7 @@ Thus, the substructures present in the input molecules will be considered for th
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[52]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[54]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -2200,7 +2281,7 @@ Thus, the substructures present in the input molecules will be considered for th
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[53]:</div>
+<div class="prompt input_prompt">In&nbsp;[55]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">fps_test</span><span class="o">.</span><span class="n">calculate_hashed_fps</span><span class="p">(</span><span class="n">nBits</span><span class="o">=</span><span class="mi">128</span><span class="p">)</span>
@@ -2241,7 +2322,7 @@ Thus, the substructures present in the input molecules will be considered for th
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[54]:</div>
+<div class="prompt input_prompt">In&nbsp;[56]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">seed</span> <span class="o">=</span> <span class="mi">23</span>
@@ -2257,7 +2338,7 @@ Thus, the substructures present in the input molecules will be considered for th
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[54]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[56]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -2285,7 +2366,7 @@ Thus, the substructures present in the input molecules will be considered for th
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[55]:</div>
+<div class="prompt input_prompt">In&nbsp;[57]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">seed</span> <span class="o">=</span> <span class="mi">23</span>
@@ -2301,7 +2382,7 @@ Thus, the substructures present in the input molecules will be considered for th
 <div class="output">
 
 
-<div class="output_area"><div class="prompt output_prompt">Out[55]:</div>
+<div class="output_area"><div class="prompt output_prompt">Out[57]:</div>
 
 
 <div class="output_text output_subarea output_execute_result">
@@ -2339,7 +2420,7 @@ Thus, the substructures present in the input molecules will be considered for th
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[56]:</div>
+<div class="prompt input_prompt">In&nbsp;[58]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">def</span> <span class="nf">Rsquared</span><span class="p">(</span><span class="n">pred</span><span class="p">,</span><span class="n">true</span><span class="p">):</span>
@@ -2367,7 +2448,7 @@ Thus, the substructures present in the input molecules will be considered for th
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[57]:</div>
+<div class="prompt input_prompt">In&nbsp;[59]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">preds_hashed</span> <span class="o">=</span> <span class="n">model_hashed_counts</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">fps_test</span><span class="o">.</span><span class="n">fps_hashed_counts</span><span class="p">)</span>
@@ -2389,7 +2470,7 @@ Thus, the substructures present in the input molecules will be considered for th
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[58]:</div>
+<div class="prompt input_prompt">In&nbsp;[60]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="n">preds_UNhashed</span> <span class="o">=</span> <span class="n">model_UNhashed_counts</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">fps_test</span><span class="o">.</span><span class="n">fps_unhashed_counts</span><span class="p">)</span>                                         
@@ -2411,7 +2492,7 @@ Thus, the substructures present in the input molecules will be considered for th
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[59]:</div>
+<div class="prompt input_prompt">In&nbsp;[61]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">print</span> <span class="s">&quot;RMSE hashed fps: &quot;</span><span class="p">,</span> <span class="n">RMSE</span><span class="p">(</span><span class="n">preds_hashed</span><span class="p">,</span> <span class="n">bio_test</span><span class="p">)</span>
@@ -2440,7 +2521,7 @@ RMSE UNhashed fps:  0.395178569569
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[60]:</div>
+<div class="prompt input_prompt">In&nbsp;[62]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">print</span> <span class="s">&quot;R2 hashed fps: &quot;</span><span class="p">,</span> <span class="n">Rsquared</span><span class="p">(</span><span class="n">preds_hashed</span><span class="p">,</span> <span class="n">bio_test</span><span class="p">)</span>
@@ -2469,7 +2550,7 @@ R2 UNhashed fps:  0.611070510232
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[61]:</div>
+<div class="prompt input_prompt">In&nbsp;[63]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span class="k">print</span> <span class="s">&quot;Running time of the whole tutorial in minutes: &quot;</span><span class="p">,</span> <span class="nb">round</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">clock</span><span class="p">()</span> <span class="o">-</span> <span class="n">initial_time</span><span class="p">)</span><span class="o">/</span><span class="mi">60</span>
@@ -2485,7 +2566,7 @@ R2 UNhashed fps:  0.611070510232
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Running time of the whole tutorial in minutes:  1.85
+<pre>Running time of the whole tutorial in minutes:  1.6
 </pre>
 </div>
 </div>

@@ -2,13 +2,14 @@ Bioalerts: a python library for the derivation of structural alerts from bioacti
 =========
 
 Isidro Cortes-Ciriano
+
 Journal of Cheminformatics 2016 8:13
+
 DOI: 10.1186/s13321-016-0125-7©  Cortes-Ciriano. 2016
 
-Reference-style: 
-![alt text][logo]
 
-[logo]: https://github.com/isidroc/bioalerts/blob/master/scheme.svg "Bioalerts scheme"
+Reference-style: 
+![alt text](https://github.com/isidroc/bioalerts/blob/master/scheme.svg "Bioalerts scheme")
 
 Abstract
 =========
@@ -24,11 +25,14 @@ Contents
 ------
 Bioalerts library and documentation. The folder build contains an HyperText Markup Language (HTML) tree which documents the library bioalerts using reStructuredText (.rst) as markdown language and processed with sphinx (www.http://sphinx-doc.org/). The documentation can be browsed by opening the file index.html file in any HTML browser. The documentation of the python library RDKit can be accessed at www.rdkit.org.
 
- Bioalerts Tutorial. The tutorial is provided in three file formats: (i) file bioalerts_tutorial.html, which can be browsed in any HTML browser, (ii) file bioalerts_tutorial, and (iii) file bioalerts_tutorial.ipynb, which can be opened with ipython notebook. This tutorial illustrates the functionalities of bioalerts on three real world data sets available at http://​github.​com/​isidroc/​bioalerts.
+Bioalerts Tutorial. The tutorial is provided in three file formats: (i) file bioalerts_tutorial.html, which can be browsed in any HTML browser, (ii) file bioalerts_tutorial, and (iii) file bioalerts_tutorial.ipynb, which can be opened with ipython notebook. This tutorial illustrates the functionalities of bioalerts on three real world data sets available at http://​github.​com/​isidroc/​bioalerts.
 
 Details
 ------
 Operating system(s): Platform independent
+
 Programming language: Python
+
 License: GNU GPL version 3
+
 Any restrictions to use by non-academics: none

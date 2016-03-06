@@ -8,7 +8,7 @@ Journal of Cheminformatics 2016 8:13
 DOI: 10.1186/s13321-016-0125-7©  Cortes-Ciriano. 2016
 
 
-![alt text](http://github.com/isidroc/bioalerts/blob/master/scheme.svg "Bioalerts scheme")
+![alt text](https://cdn.rawgit.com/isidroc/bioalerts/master/scheme.svg "Bioalerts scheme")
 
 Abstract
 =========
